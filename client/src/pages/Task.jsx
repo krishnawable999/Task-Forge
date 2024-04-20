@@ -3,7 +3,7 @@ import React from 'react'
 const Task = () => {
   return (
     <div>
-      Taks
+      Task
     </div>
   )
 }
