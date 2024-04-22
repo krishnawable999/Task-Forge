@@ -134,7 +134,7 @@ const Dashboard = () => {
 
   const Card = ({label, count, bg, icon})=>{
     return (
-      <div className="w-full h-32 bg-white shadow-md p-5 rounded-md items-center justify-between">
+      <div className="w-full h-32 relative bg-white shadow-md p-5 rounded-md items-center justify-between">
         <div className="h-full flex flex-1 flex-col justify-between">
           <p className="text-base text-gray-600 ">
             {label}
@@ -142,7 +142,7 @@ const Dashboard = () => {
           <span className="text-2xl font-semibold">{count}</span>
           <span className="text-sm text-gray-400">{"110% last month"}</span>
         </div>
-        <div className={clsx("w-10 h-10 flex rounded-full items-center justify-center text-white", bg)}>
+        <div className={clsx("w-10 absolute right-4 top-10 h-10 flex rounded-full items-center justify-center text-white", bg)}>
           {icon}
         </div>
       </div>
