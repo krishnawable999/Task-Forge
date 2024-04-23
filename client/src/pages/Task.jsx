@@ -8,6 +8,9 @@ import Button from '../components/Button';
 import { IoMdAdd } from 'react-icons/io';
 import Tabs from '../components/Tabs';
 import TaskTitle from '../components/TaskTitle';
+import BoardView from '../components/BoardView';
+import { tasks } from '../assets/data';
+import Table from '../components/task/Table';
 const TABS = [
   { title: "Board View", icon: <MdGridView /> },
   { title: "List View", icon: <FaList /> },
@@ -38,6 +41,7 @@ const Task = () => {
         <Title title={status ? `${status} Task` : "Tasks"}/>
         {
           !status && (<Button
+          onClick={() => setOpen(true)}
           label="Create Task"
           icon={<IoMdAdd className="text-lg"/>}
           className="flex flex-row-reverse gap-1 items-center bg-blue-600 text-white rounded-md py-2 2xl:py-2.5 "
@@ -48,13 +52,20 @@ const Task = () => {
         <Tabs tabs={TABS} setSelected={setSelected}>
           {
             !status && (
-              <div>
+              <div className="w-full flex justify-between gap-4 md:gap-4 py-4">
                 <TaskTitle label="To Do" className={TASK_TYPE.todo}/>
                 <TaskTitle label="In Progress" className={TASK_TYPE["in progress"]}/>
                 <TaskTitle label="Completed" className={TASK_TYPE.completed}/>
               </div>
             )
           }
+          {selected !== 1 ? (
+          <BoardView tasks={tasks} />
+        ) : (
+          <div className='w-full'>
+            <Table tasks={tasks} />
+          </div>
+        )}
         </Tabs>
       </div>
     </div>
