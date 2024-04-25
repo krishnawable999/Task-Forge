@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import React from 'react'
 
-const Button = ({icon, className, label, type, onclick=()=>{}}) => {
+const Button = ({icon, className, label, type, onClick=()=>{}}) => {
   return (
-    <button type={type || "button"} className={clsx("px-3 py-2 outline-none rounded-full",className)}>
+    <button type={type || "button"} className={clsx("px-3 py-2 outline-none rounded-full",className)} onClick={onClick}>
 
         <span>{label}</span>
         {icon && icon}

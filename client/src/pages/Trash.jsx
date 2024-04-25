@@ -11,6 +11,8 @@ import Title from "../components/Title";
 import Button from "../components/Button";
 import { tasks } from "../assets/data";
 import { PRIOTITYSTYELS, TASK_TYPE } from "../utils";
+import ConfirmatioDialog from "../components/Dialogs";
+import AddUser from "../components/AddUser";
 
 const ICONS = {
   high: <MdKeyboardDoubleArrowUp />,
@@ -25,6 +27,31 @@ const Trash = () => {
   const [msg, setMsg] = useState(null);
   const [type, setType] = useState("delete");
   const [selected, setSelected] = useState("");
+
+  const deleteAllClick = () =>{
+    setType("deleteAll");
+    setMsg("Do you want to permantly delete all items?");
+    setOpenDialog(true);
+  }
+
+  const restoreAllClick = () =>{
+    setType("restoreAll");
+    setMsg("Do you want to restore all items?");
+    setOpenDialog(true);
+  }
+
+  const restoreClick = (id) =>{
+    setSelected(id);
+    setType("restore");
+    setMsg("Do you want to restore item?");
+    setOpenDialog(true);
+  }
+
+  const deleteClick = (id) =>{
+    setType("delete");
+    setSelected(id);
+    setOpenDialog(true);
+  }
 
 
   const TableHeader = () => (
@@ -94,13 +121,13 @@ const Trash = () => {
               label='Restore All'
               icon={<MdOutlineRestore className='text-lg hidden md:flex' />}
               className='flex flex-row-reverse gap-1 items-center  text-black text-sm md:text-base rounded-md 2xl:py-2.5'
-              onClick={() => restoreAllClick()}
+              onClick={() => restoreAllClick(item._id)}
             />
             <Button
               label='Delete All'
               icon={<MdDelete className='text-lg hidden md:flex' />}
               className='flex flex-row-reverse gap-1 items-center  text-red-600 text-sm md:text-base rounded-md 2xl:py-2.5'
-              onClick={() => deleteAllClick()}
+              onClick={() => deleteAllClick(item._id)}
             />
           </div>
         </div>
@@ -120,7 +147,7 @@ const Trash = () => {
 
       {/* <AddUser open={open} setOpen={setOpen} /> */}
 
-      {/* <ConfirmatioDialog
+      <ConfirmatioDialog
         open={openDialog}
         setOpen={setOpenDialog}
         msg={msg}
@@ -128,7 +155,7 @@ const Trash = () => {
         type={type}
         setType={setType}
         onClick={() => deleteRestoreHandler()}
-      /> */}
+      />
     </div>
   )
 }
