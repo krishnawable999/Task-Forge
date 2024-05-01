@@ -6,6 +6,9 @@ import { IoLogOutOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getInitials } from '../utils';
+import { toast } from 'sonner';
+import { useLogoutMutation } from '../redux/slices/api/authApiSlice';
+import {logout} from "../redux/slices/authSlice"
 const UserAvatar = () => {
   const [open, setOpen] = useState(false);
   const [openPassword, setOpenPassword] = useState(false);
@@ -14,8 +17,17 @@ const UserAvatar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const logoutHandler = ()=>{
-    console.log("Logout");
+  const [logoutUser] = useLogoutMutation();
+  const logoutHandler = async ()=>{
+    try {
+      await logoutUser().unwrap();
+      dispatch(logout());
+      console.log("before navogation",useSelector((state) => state.auth));
+      navigate("/log-in");
+      console.log("Auth State after navigation:", useSelector((state) => state.auth));
+    } catch (error) {
+      toast.error("Something Went Wrong")
+    }
   }
 
   return (
