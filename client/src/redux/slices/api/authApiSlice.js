@@ -13,7 +13,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 method: "POST",
                 body: data,
                 credentials: "include",
-            })
+            }),
         }),
 
         register: builder.mutation({
@@ -36,3 +36,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {useLoginMutation, useRegisterMutation, useLogoutMutation} = authApiSlice;
+
+// export function Logout(){
+//     return (dispatch)=>{
+//         dispatch(authApiSlice.actions.logout())
+//     }
+// }

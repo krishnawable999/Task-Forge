@@ -21,7 +21,7 @@ export const createJWT = (res, userId, role) => {
     res.cookie("token",token,{
         httpOnly: true,
         secure: process.env.NODE_ENV  !== "development",
-        sameSite: "none", // prevent CSRF attack
+        sameSite: "strict", // prevent CSRF attack
         maxAge : 2*24*60*60*1000, // will be give 2 days
 
     })

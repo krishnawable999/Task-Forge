@@ -1,6 +1,7 @@
 import Notice from "../models/notification.js";
 import User from "../models/user.js";
 import { createJWT } from "../utils/index.js";
+import { response } from "express";
 export const registerUser = async (req,res) =>{
     try {
         const {name, email, password, isAdmin, role, title} = req.body;
@@ -17,8 +18,10 @@ export const registerUser = async (req,res) =>{
             name,
             email,
             password,
+            isAdmin,
             role,
             title,
+            
         });
 
         if(user){
@@ -117,7 +120,7 @@ export const getNotificationList = async (req,res) =>{
 
 export const updateUserProfile = async (req,res) =>{
     try {
-        const {userId, email} = req.user;
+        const {userId, isAdmin} = req.user;
         const {_id} = req.body;
 
         const id = isAdmin && userId === _id ? userId : isAdmin && userId !== _id ? _id : userId;
@@ -130,8 +133,8 @@ export const updateUserProfile = async (req,res) =>{
             user.role = req.body.role || user.role;
 
 
-            const updateUser = await User.save();
-            password = undefined;
+            const updateUser = await user.save();
+            // password = undefined;
 
             res.status(201).json({
                 status: true,
