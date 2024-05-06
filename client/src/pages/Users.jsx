@@ -79,6 +79,8 @@ const Users = () => {
 
   }
 
+  
+
 
   const TableHeader = () => (
     <thead className='border-b border-gray-300'>
@@ -91,6 +93,7 @@ const Users = () => {
       </tr>
     </thead>
   );
+
 
 
   const TableRow = ({ user }) => (
@@ -169,7 +172,7 @@ const Users = () => {
           <table className='w-full mb-5'>
             <TableHeader />
             <tbody>
-            {data?.users?.map((user, index) => (
+            {data?.map((user, index) => (
               <TableRow key={index} user={user} />
             ))}
 

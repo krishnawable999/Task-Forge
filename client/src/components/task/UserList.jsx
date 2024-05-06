@@ -5,6 +5,7 @@ import { BsChevronExpand } from "react-icons/bs";
 import clsx from "clsx";
 import { getInitials } from "../../utils";
 import { MdCheck } from "react-icons/md";
+import { useGetTeamListQuery } from '../../redux/slices/api/userApiSlice';
 
 
 function getInitialsAlternate(name) {
@@ -17,7 +18,8 @@ function getInitialsAlternate(name) {
   }
 
 const UserList = ({setTeam, team}) => {
-    const data = summary.users;
+    const {data, isLoading,error} = useGetTeamListQuery();
+    // console.log(data)
     const [selectedUsers, setSelectedUsers] = useState([]);
 
     const handleChange = (el) => {
@@ -32,7 +34,7 @@ const UserList = ({setTeam, team}) => {
         else{
             setSelectedUsers(team);
         }
-    },[])
+    },[isLoading])
 
 
   return (

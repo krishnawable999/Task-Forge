@@ -1,21 +1,21 @@
-import React from 'react'
+import clsx from 'clsx';
+import moment from "moment";
+import React from 'react';
+import { FaNewspaper } from "react-icons/fa";
+import { FaArrowsToDot } from "react-icons/fa6";
+import { LuClipboardEdit } from "react-icons/lu";
 import {
   MdAdminPanelSettings,
   MdKeyboardArrowDown,
   MdKeyboardArrowUp,
   MdKeyboardDoubleArrowUp,
 } from "react-icons/md";
-import { LuClipboardEdit } from "react-icons/lu";
-import { FaNewspaper, FaUsers } from "react-icons/fa";
-import { FaArrowsToDot } from "react-icons/fa6";
-import moment from "moment";
-import { summary, user } from '../assets/data';
-import clsx from 'clsx';
 import Charts from '../components/Charts';
-import { BGS, PRIOTITYSTYELS, TASK_TYPE, getInitials } from '../utils';
+import Loader from '../components/Loader';
 import UserInfo from '../components/UserInfo';
 import UserTable from '../components/UserTable';
-
+import { useGetDashboardStatsQuery } from '../redux/slices/api/taskApiSlice';
+import { BGS, PRIOTITYSTYELS, TASK_TYPE } from '../utils';
 const TaskTable = ({tasks}) =>{
   const ICONS = {
     high: <MdKeyboardDoubleArrowUp />,
@@ -44,7 +44,7 @@ const TaskTable = ({tasks}) =>{
             className={clsx("w-4 h-4 rounded-full", TASK_TYPE[task.stage])}
           />
 
-          <p className='text-base text-black'>{task.title}</p>
+          <p className='text-base text-black'>{task?.title}</p>
         </div>
       </td>
 
@@ -53,7 +53,7 @@ const TaskTable = ({tasks}) =>{
           <span className={clsx("text-lg", PRIOTITYSTYELS[task.priority])}>
             {ICONS[task.priority]}
           </span>
-          <span className='capitalize'>{task.priority}</span>
+          <span className='capitalize'>{task?.priority}</span>
         </div>
       </td>
 
@@ -100,12 +100,24 @@ const TaskTable = ({tasks}) =>{
 }
 
 const Dashboard = () => {
-  const totals = summary.tasks;
+ 
+  const {data, isLoading} = useGetDashboardStatsQuery();
+  // console.log(data);
+  if(isLoading){
+    return(
+      <div className="py-10">
+        <Loader/>
+      </div>
+    )
+  }
+  const totals = data?.tasks;
+  // console.log(data.last10Tasks);
+  // console.log(totals)
   const stats = [
     {
       _id: "1",
       label: "TOTAL TASK",
-      total: summary?.totalTasks || 0,
+      total: data?.totalTasks || 0,
       icon: <FaNewspaper />,
       bg: "bg-[#1d4ed8]",
     },
@@ -162,15 +174,16 @@ const Dashboard = () => {
         <h4 className="text-xl text-gray-600 font-semibold ">
           Chart by Priority
         </h4>
-          <Charts/>
+          <Charts data = {data?.graphData}/>
       </div>
       <div className="w-full flex flex-col md:flow-row gap-4 2xl:gap-10 py-8">
           {/* left */}
           
-            <TaskTable tasks={summary.last10Task}/>
+          <TaskTable tasks={data.last10Tasks} />
+
          
           {/* {right} */}
-          <UserTable users={summary.users} />
+          <UserTable users={data?.users} />
           
       </div>
     </div>

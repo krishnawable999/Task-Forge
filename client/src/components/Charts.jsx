@@ -9,8 +9,8 @@ import {
     XAxis,
     YAxis,
   } from "recharts";
-import { chartData } from '../assets/data';
-const Charts = () => {
+
+const Charts = ({data}) => {
   return (
     <div>
       <ResponsiveContainer
@@ -20,7 +20,7 @@ const Charts = () => {
         <BarChart 
         width={150}
         height={40}
-        data={chartData}
+        data={data}
         >
             <XAxis dataKey="name"/>
             <YAxis dataKey="total"/>

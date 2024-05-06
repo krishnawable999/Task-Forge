@@ -46,7 +46,6 @@ const UserAvatar = () => {
   return (
     <div className="">
       <Menu as="div" className="relative inline-block text-left ">
-        <h1 onClick={logoutHandler}>logout</h1>
             <div>
               <Menu.Button className="w-10 h-10 2xl:w-12 2xl:h-12 items-center justify-center rounded-full bg-blue-600 ">
                 <span className="text-white font-semibold ">

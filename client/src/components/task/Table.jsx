@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import { BiMessageAltDetail } from "react-icons/bi";
 import {
   MdAttachFile,
@@ -13,40 +13,65 @@ import { FaList } from 'react-icons/fa';
 import UserInfo from '../UserInfo';
 import Button from '../Button';
 import ConfirmatioDialog from '../Dialogs';
+import { useTrashTaskMutation } from '../../redux/slices/api/taskApiSlice';
+import AddTask from './AddTask';
 
 
 
 const ICONS = {
-    high: <MdKeyboardDoubleArrowUp />,
-    medium: <MdKeyboardArrowUp />,
-    low: <MdKeyboardArrowDown />,
+  high: <MdKeyboardDoubleArrowUp />,
+  medium: <MdKeyboardArrowUp />,
+  low: <MdKeyboardArrowDown />,
+};
+const Table = ({ tasks }) => {
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const [trashTask] = useTrashTaskMutation();
+  const [openEdit, setOpenEdit] = useState(false);
+  const deleteClicks = (id) => {
+    setSelected(id);
+    setOpenDialog(true);
   };
-const Table = ({tasks}) => {
-    const [openDialog, setOpenDialog] = useState(false);
-    const [selected, setSelected] = useState(null);
 
-    const deleteClicks = (id) =>{
-      setSelected(id);
-      setOpenDialog(true);
-    };
+  const editTaskHandler = (el) =>{
+    setSelected(el);
+    setOpenEdit(true);
+  }
 
-    const deleteHandler = () => {};
+  const deleteHandler = async () => {
+    try {
+      const result = await trashTask({
+        id: selected,
+        isTrash: "trash",
+      }).unwrap();
 
-    const TableHeader = () => (
-        <thead className='w-full border-b border-gray-300'>
-          <tr className='w-full text-black  text-left'>
-            <th className='py-2'>Task Title</th>
-            <th className='py-2'>Priority</th>
-            <th className='py-2 line-clamp-1'>Created At</th>
-            <th className='py-2'>Assets</th>
-            <th className='py-2'>Team</th>
-          </tr>
-        </thead>
-      );
+      toast.success(result?.message)
 
-      const TableRow = ({task}) => (
-        <tr className="border-b border-gray-200 text-gray-600 hover:bg-gray-300/10 ">
-            <td className='py-2'>
+      setTimeout(() => {
+        setOpenDialog(false),
+          window.location.reload();
+      }, 500);
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.data?.message || err.error);
+    }
+  };
+
+  const TableHeader = () => (
+    <thead className='w-full border-b border-gray-300'>
+      <tr className='w-full text-black  text-left'>
+        <th className='py-2'>Task Title</th>
+        <th className='py-2'>Priority</th>
+        <th className='py-2 line-clamp-1'>Created At</th>
+        <th className='py-2'>Assets</th>
+        <th className='py-2'>Team</th>
+      </tr>
+    </thead>
+  );
+
+  const TableRow = ({ task }) => (
+    <tr className="border-b border-gray-200 text-gray-600 hover:bg-gray-300/10 ">
+      <td className='py-2'>
         <div className='flex items-center gap-2'>
           <div
             className={clsx("w-4 h-4 rounded-full", TASK_TYPE[task.stage])}
@@ -114,6 +139,7 @@ const Table = ({tasks}) => {
           className='text-blue-600 hover:text-blue-500 sm:px-0 text-sm md:text-base'
           label='Edit'
           type='button'
+          onClick={()=> editTaskHandler(task)}
         />
 
         <Button
@@ -126,14 +152,14 @@ const Table = ({tasks}) => {
 
 
 
-        </tr>
+    </tr>
 
-      )
+  )
 
 
   return (
     <>
-    <div className='bg-white  px-2 md:px-4 pt-4 pb-9 shadow-md rounded'>
+      <div className='bg-white  px-2 md:px-4 pt-4 pb-9 shadow-md rounded'>
         <div className='overflow-x-auto'>
           <table className='w-full '>
             <TableHeader />
@@ -148,12 +174,17 @@ const Table = ({tasks}) => {
 
       {/* {To Do} */}
       <ConfirmatioDialog
-      open={openDialog}
-      setOpen={setOpenDialog}
-      onClick={deleteHandler}
+        open={openDialog}
+        setOpen={setOpenDialog}
+        onClick={deleteHandler}
       />
 
-      
+      <AddTask
+        open={openEdit}
+        setOpen={setOpenDialog}
+        task={selected}
+        key={new Date().getTime()}
+      />
 
     </>
   )
