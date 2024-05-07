@@ -22,7 +22,7 @@ const Login = () => {
       const result = await login(data).unwrap();
       dispatch(setCredentials(result));
       navigate("/");
-      console.log(result);
+      // console.log(result);
       // console.log("Submit");
     } catch (error) {
       console.log(error);
